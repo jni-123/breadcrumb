@@ -1,0 +1,41 @@
+{
+  "name": "@breadcrumb/core",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Core protocol primitives for Breadcrumb",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jni-123/breadcrumb.git",
+    "directory": "packages/core"
+  },
+  "homepage": "https://github.com/jni-123/breadcrumb#readme",
+  "engines": {
+    "node": ">=20"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./schemas/*": "./schemas/*"
+  },
+  "files": [
+    "dist",
+    "schemas"
+  ],
+  "scripts": {
+    "build": "rm -rf schemas && mkdir -p schemas && cp ../../protocol/schemas/*.json schemas/ && tsc -p tsconfig.json",
+    "clean": "rm -rf dist schemas"
+  },
+  "dependencies": {
+    "ajv": "^8.17.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.0",
+    "typescript": "^5.8.3"
+  }
+}

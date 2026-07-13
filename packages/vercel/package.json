@@ -1,0 +1,44 @@
+{
+  "name": "@breadcrumb/vercel",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Vercel Functions and managed PostgreSQL integration for Breadcrumb",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jni-123/breadcrumb.git",
+    "directory": "packages/vercel"
+  },
+  "homepage": "https://github.com/jni-123/breadcrumb#readme",
+  "engines": {
+    "node": ">=20"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@breadcrumb/core": "workspace:*",
+    "@breadcrumb/postgres": "workspace:*",
+    "@breadcrumb/server": "workspace:*",
+    "@vercel/functions": "^3.7.5",
+    "pg": "^8.16.3"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.0",
+    "@types/pg": "^8.15.4",
+    "typescript": "^5.8.3"
+  }
+}

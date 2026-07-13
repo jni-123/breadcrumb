@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://breadcrumb.dev/schemas/repository-0.1.schema.json",
+  "title": "Breadcrumb repository manifest 0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["version", "targets"],
+  "properties": {
+    "version": { "const": "0.1" },
+    "targets": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["origin", "manifest"],
+        "properties": {
+          "origin": { "type": "string", "format": "uri" },
+          "manifest": { "type": "string", "format": "uri" },
+          "provider": { "type": "string", "maxLength": 100 }
+        }
+      }
+    }
+  }
+}

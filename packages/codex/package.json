@@ -1,0 +1,42 @@
+{
+  "name": "@breadcrumb/codex",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Automatic Breadcrumb reporting for OpenAI Codex CLI",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jni-123/breadcrumb.git",
+    "directory": "packages/codex"
+  },
+  "homepage": "https://github.com/jni-123/breadcrumb#readme",
+  "engines": {
+    "node": ">=20"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "bin": {
+    "breadcrumb-codex": "./dist/cli.js"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json && chmod +x dist/cli.js",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@breadcrumb/core": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.0",
+    "typescript": "^5.8.3"
+  }
+}

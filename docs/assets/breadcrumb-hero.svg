@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="480" viewBox="0 0 1200 480" role="img" aria-labelledby="title desc">
+  <title id="title">Let agents browsing your website leave feedback</title>
+  <desc id="desc">Breadcrumb sends private, structured feedback from agents browsing your website directly to your storage.</desc>
+  <defs>
+    <linearGradient id="background" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0b1220"/>
+      <stop offset="1" stop-color="#101c30"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#f6b73c"/>
+      <stop offset="1" stop-color="#f7d154"/>
+    </linearGradient>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#020617" flood-opacity="0.35"/>
+    </filter>
+  </defs>
+
+  <rect width="1200" height="480" rx="24" fill="url(#background)"/>
+  <rect x="1" y="1" width="1198" height="478" rx="23" fill="none" stroke="#2a3a51"/>
+
+  <!-- Brand -->
+  <g transform="translate(64 48)">
+    <path d="M4 15V7a7 7 0 0 1 7-7h10M4 15v8a7 7 0 0 0 7 7h10" fill="none" stroke="#f7c948" stroke-width="4" stroke-linecap="round"/>
+    <circle cx="21" cy="0" r="3.5" fill="#f7c948"/>
+    <circle cx="21" cy="30" r="3.5" fill="#f7c948"/>
+    <text x="37" y="23" fill="#f8fafc" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="25" font-weight="700" letter-spacing="-0.5">Breadcrumb</text>
+  </g>
+
+  <!-- Message -->
+  <text x="64" y="156" fill="#f8fafc" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="42" font-weight="720" letter-spacing="-1.2">
+    <tspan x="64" dy="0">Let agents browsing</tspan>
+    <tspan x="64" dy="52">your website leave</tspan>
+    <tspan x="64" dy="52" fill="url(#accent)">feedback.</tspan>
+  </text>
+  <text x="64" y="336" fill="#d6deea" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="22" font-weight="600">Directly in your storage.</text>
+  <g transform="translate(64 407)">
+    <circle cx="7" cy="7" r="7" fill="#18362f"/>
+    <path d="M3.5 7l2.2 2.2 4.8-5" fill="none" stroke="#6ee7b7" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="23" y="12" fill="#7f8fa6" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="13">No hosted middleman</text>
+  </g>
+
+  <!-- Website -->
+  <g transform="translate(615 95)" filter="url(#shadow)">
+    <rect width="250" height="285" rx="18" fill="#f8fafc"/>
+    <path d="M0 18A18 18 0 0 1 18 0h214a18 18 0 0 1 18 18v25H0z" fill="#dce4ee"/>
+    <circle cx="21" cy="22" r="4" fill="#f87171"/>
+    <circle cx="35" cy="22" r="4" fill="#fbbf24"/>
+    <circle cx="49" cy="22" r="4" fill="#34d399"/>
+    <rect x="68" y="14" width="158" height="16" rx="8" fill="#c5d0dd"/>
+    <circle cx="80" cy="22" r="3" fill="#64748b"/>
+    <rect x="23" y="70" width="78" height="10" rx="5" fill="#17243a"/>
+    <rect x="23" y="92" width="172" height="7" rx="3.5" fill="#cbd5e1"/>
+    <rect x="23" y="108" width="146" height="7" rx="3.5" fill="#d7dee8"/>
+    <rect x="23" y="142" width="204" height="84" rx="12" fill="#edf2f7"/>
+    <rect x="39" y="160" width="104" height="8" rx="4" fill="#aebdcd"/>
+    <rect x="39" y="178" width="159" height="6" rx="3" fill="#cbd5e1"/>
+    <rect x="39" y="192" width="129" height="6" rx="3" fill="#cbd5e1"/>
+    <rect x="23" y="248" width="83" height="13" rx="6.5" fill="#d7dee8"/>
+  </g>
+
+  <!-- Agent feedback bubble -->
+  <g transform="translate(754 246)" filter="url(#shadow)">
+    <path d="M18 0h174a18 18 0 0 1 18 18v74a18 18 0 0 1-18 18H63l-24 22 5-22H18A18 18 0 0 1 0 92V18A18 18 0 0 1 18 0z" fill="#17253a" stroke="#3a4d68"/>
+    <g transform="translate(18 18)">
+      <rect width="38" height="38" rx="11" fill="#2f2918" stroke="#70591e"/>
+      <rect x="8" y="11" width="22" height="18" rx="6" fill="none" stroke="#f7c948" stroke-width="2"/>
+      <path d="M19 7v4M13 18h.01M25 18h.01M14 24h10" fill="none" stroke="#f7c948" stroke-width="2" stroke-linecap="round"/>
+    </g>
+    <text x="70" y="33" fill="#f8fafc" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="13" font-weight="650">AGENT FEEDBACK</text>
+    <text x="70" y="57" fill="#a9b6c9" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="14">“This task was hard</text>
+    <text x="70" y="78" fill="#a9b6c9" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="14">to discover.”</text>
+  </g>
+
+  <!-- Direct path -->
+  <path d="M967 302h76" fill="none" stroke="#f7c948" stroke-width="3" stroke-linecap="round" stroke-dasharray="2 10"/>
+  <path d="M1036 294l10 8-10 8" fill="none" stroke="#f7c948" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- Owner storage -->
+  <g transform="translate(1047 218)">
+    <ellipse cx="49" cy="23" rx="46" ry="18" fill="#16342f" stroke="#4b8f7c" stroke-width="2"/>
+    <path d="M3 23v112c0 10 21 18 46 18s46-8 46-18V23" fill="#132c2b" stroke="#4b8f7c" stroke-width="2"/>
+    <path d="M3 76c0 10 21 18 46 18s46-8 46-18M3 119c0 10 21 18 46 18s46-8 46-18" fill="none" stroke="#376c61" stroke-width="2"/>
+    <ellipse cx="49" cy="23" rx="31" ry="9" fill="#1e4840"/>
+    <path d="M38 57h22M38 65h22" stroke="#6ee7b7" stroke-width="3" stroke-linecap="round"/>
+    <text x="49" y="184" text-anchor="middle" fill="#9de8cf" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="650" letter-spacing="0.7">YOUR STORAGE</text>
+  </g>
+</svg>

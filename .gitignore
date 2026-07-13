@@ -1,0 +1,11 @@
+node_modules/
+dist/
+coverage/
+packages/core/schemas/
+*.tsbuildinfo
+.env
+.env.*
+!.env.example
+.DS_Store
+**/.codex/hooks.json
+**/.codex/hooks.json.breadcrumb-backup-*

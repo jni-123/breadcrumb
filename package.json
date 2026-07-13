@@ -1,0 +1,44 @@
+{
+  "name": "breadcrumb",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Usability telemetry for machine users",
+  "license": "Apache-2.0",
+  "packageManager": "pnpm@10.13.1",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "pnpm -r --if-present build",
+    "changeset": "changeset",
+    "clean": "pnpm -r --if-present clean",
+    "codex:hooks": "node packages/codex/dist/cli.js",
+    "db:migrate": "pnpm build && pnpm --filter @breadcrumb/owner-server db:migrate",
+    "demo": "pnpm build && pnpm --filter @breadcrumb/owner-server dev",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "lint": "eslint .",
+    "test": "vitest run --exclude '**/*.integration.test.ts'",
+    "test:coverage": "vitest run --exclude '**/*.integration.test.ts' --coverage",
+    "test:integration": "vitest run packages/postgres/test/postgres.integration.test.ts tests/e2e/vercel-gateway.integration.test.ts",
+    "test:packages": "tsx tests/package-smoke.ts",
+    "typecheck": "tsc --noEmit",
+    "version-packages": "changeset version",
+    "release": "pnpm build && pnpm test:packages && changeset publish"
+  },
+  "devDependencies": {
+    "@changesets/cli": "^2.31.0",
+    "@eslint/js": "^9.31.0",
+    "@types/node": "^22.15.0",
+    "@types/pg": "^8.15.4",
+    "@vitest/coverage-v8": "^3.2.7",
+    "eslint": "^9.31.0",
+    "pg": "^8.16.3",
+    "prettier": "^3.6.2",
+    "tsx": "^4.20.3",
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.37.0",
+    "vitest": "^3.2.4"
+  }
+}

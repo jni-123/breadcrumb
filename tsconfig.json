@@ -1,0 +1,21 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "types": ["node", "vitest/globals"],
+    "baseUrl": ".",
+    "paths": {
+      "@breadcrumb/core": ["packages/core/src/index.ts"],
+      "@breadcrumb/server": ["packages/server/src/index.ts"],
+      "@breadcrumb/postgres": ["packages/postgres/src/index.ts"],
+      "@breadcrumb/codex": ["packages/codex/src/index.ts"],
+      "@breadcrumb/vercel": ["packages/vercel/src/index.ts"]
+    }
+  },
+  "include": [
+    "packages/**/*.ts",
+    "examples/**/*.ts",
+    "tests/**/*.ts",
+    "vitest.config.ts"
+  ]
+}

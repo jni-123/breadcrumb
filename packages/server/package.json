@@ -1,0 +1,39 @@
+{
+  "name": "@breadcrumb/server",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Framework-neutral Breadcrumb ingestion handler",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jni-123/breadcrumb.git",
+    "directory": "packages/server"
+  },
+  "homepage": "https://github.com/jni-123/breadcrumb#readme",
+  "engines": {
+    "node": ">=20"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@breadcrumb/core": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.0",
+    "typescript": "^5.8.3"
+  }
+}

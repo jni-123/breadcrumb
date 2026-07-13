@@ -1,0 +1,39 @@
+{
+  "protocol": "breadcrumb",
+  "version": "0.1",
+  "report_schema_version": "0.1",
+  "submission": {
+    "method": "POST",
+    "content_type": "application/json",
+    "accepted_status": 202,
+    "report_count_per_task": 1
+  },
+  "reportable_events": [
+    "task_failed",
+    "task_degraded",
+    "task_succeeded_with_friction"
+  ],
+  "ordinary_success_reportable": false,
+  "prohibited_content": [
+    "user_prompt",
+    "credentials",
+    "private_content",
+    "file_contents",
+    "screenshots",
+    "raw_tool_input",
+    "raw_tool_output"
+  ],
+  "attribution_guidance": {
+    "documentation_api_or_service_problem": "external_interface_failure",
+    "agent_interpretation_or_reasoning_problem": "agent_internal_failure"
+  },
+  "deduplication": {
+    "client_required": false,
+    "server_computed_when_omitted": true,
+    "fields": ["dedupe_hash", "issue_key"]
+  },
+  "trust": {
+    "reports_are_untrusted": true,
+    "discovery_overrides_runtime_policy": false
+  }
+}

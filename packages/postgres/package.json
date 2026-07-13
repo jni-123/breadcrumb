@@ -1,0 +1,43 @@
+{
+  "name": "@breadcrumb/postgres",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "PostgreSQL storage adapter for Breadcrumb",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jni-123/breadcrumb.git",
+    "directory": "packages/postgres"
+  },
+  "homepage": "https://github.com/jni-123/breadcrumb#readme",
+  "engines": {
+    "node": ">=20"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "migrations"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@breadcrumb/core": "workspace:*",
+    "@breadcrumb/server": "workspace:*",
+    "pg": "^8.16.3"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.0",
+    "@types/pg": "^8.15.4",
+    "typescript": "^5.8.3"
+  }
+}

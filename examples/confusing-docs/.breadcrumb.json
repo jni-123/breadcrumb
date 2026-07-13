@@ -1,0 +1,10 @@
+{
+  "version": "0.1",
+  "targets": [
+    {
+      "origin": "http://localhost:3000",
+      "manifest": "http://localhost:3000/.well-known/breadcrumb",
+      "provider": "Breadcrumb Demo"
+    }
+  ]
+}

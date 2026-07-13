@@ -1,0 +1,240 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://breadcrumb.dev/schemas/report-0.1.schema.json",
+  "title": "Breadcrumb experience report 0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "event_type",
+    "target",
+    "task",
+    "outcome",
+    "dimensions",
+    "friction",
+    "metrics",
+    "agent",
+    "privacy",
+    "attribution"
+  ],
+  "properties": {
+    "schema_version": { "const": "0.1" },
+    "event_type": {
+      "enum": ["task_failed", "task_degraded", "task_succeeded_with_friction"]
+    },
+    "target": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "origin", "uri"],
+      "properties": {
+        "type": {
+          "enum": [
+            "documentation",
+            "api",
+            "sdk",
+            "repository",
+            "cli",
+            "website",
+            "service",
+            "other"
+          ]
+        },
+        "origin": { "type": "string", "format": "uri", "maxLength": 2048 },
+        "uri": { "type": "string", "format": "uri", "maxLength": 2048 },
+        "provider": { "type": "string", "maxLength": 100 },
+        "version": { "type": "string", "maxLength": 100 }
+      }
+    },
+    "task": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["category"],
+      "properties": {
+        "category": { "type": "string", "pattern": "^[a-z0-9_:-]{1,100}$" },
+        "description": { "type": "string", "maxLength": 500 }
+      }
+    },
+    "outcome": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "confidence", "summary"],
+      "properties": {
+        "status": {
+          "enum": [
+            "success",
+            "success_with_friction",
+            "partial_success",
+            "failure",
+            "abandoned"
+          ]
+        },
+        "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+        "summary": { "type": "string", "minLength": 1, "maxLength": 1000 }
+      }
+    },
+    "dimensions": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "discoverability",
+        "comprehensibility",
+        "executability",
+        "verifiability"
+      ],
+      "properties": {
+        "discoverability": { "$ref": "#/$defs/dimension" },
+        "comprehensibility": { "$ref": "#/$defs/dimension" },
+        "executability": { "$ref": "#/$defs/dimension" },
+        "verifiability": { "$ref": "#/$defs/dimension" }
+      }
+    },
+    "friction": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 25,
+      "items": { "$ref": "#/$defs/friction" }
+    },
+    "metrics": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "pages_visited": { "$ref": "#/$defs/count" },
+        "searches_performed": { "$ref": "#/$defs/count" },
+        "files_inspected": { "$ref": "#/$defs/count" },
+        "tool_calls": { "$ref": "#/$defs/count" },
+        "command_calls": { "$ref": "#/$defs/count" },
+        "command_failures": { "$ref": "#/$defs/count" },
+        "retries": { "$ref": "#/$defs/count" },
+        "http_errors": { "$ref": "#/$defs/count" },
+        "elapsed_ms": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "agent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["runtime"],
+      "properties": {
+        "runtime": { "type": "string", "maxLength": 100 },
+        "runtime_version": { "type": "string", "maxLength": 100 },
+        "model": { "type": "string", "maxLength": 100 },
+        "integration_version": { "type": "string", "maxLength": 100 }
+      }
+    },
+    "privacy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "user_prompt_included",
+        "file_contents_included",
+        "screenshots_included"
+      ],
+      "properties": {
+        "user_prompt_included": { "type": "boolean" },
+        "file_contents_included": { "type": "boolean" },
+        "screenshots_included": { "type": "boolean" }
+      }
+    },
+    "attribution": {
+      "description": "Attribute documentation, API, service, or other published-interface problems to external_interface_failure. Use agent_internal_failure only when the agent's own interpretation or reasoning caused the friction.",
+      "enum": [
+        "agent_internal_failure",
+        "local_environment_failure",
+        "repository_failure",
+        "external_interface_failure",
+        "website_compatibility_failure",
+        "unknown"
+      ]
+    },
+    "deduplication": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["dedupe_hash", "issue_key"],
+      "properties": {
+        "dedupe_hash": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+        "issue_key": { "type": "string", "minLength": 1, "maxLength": 500 }
+      }
+    }
+  },
+  "examples": [
+    {
+      "schema_version": "0.1",
+      "event_type": "task_succeeded_with_friction",
+      "target": {
+        "type": "documentation",
+        "origin": "https://docs.example.com",
+        "uri": "https://docs.example.com/guide"
+      },
+      "task": { "category": "documentation_verification" },
+      "outcome": {
+        "status": "success_with_friction",
+        "confidence": 0.9,
+        "summary": "The task succeeded after resolving conflicting documentation."
+      },
+      "dimensions": {
+        "discoverability": { "status": "good" },
+        "comprehensibility": { "status": "degraded" },
+        "executability": { "status": "good" },
+        "verifiability": { "status": "degraded" }
+      },
+      "friction": [
+        {
+          "type": "conflicting_information",
+          "resource": "https://docs.example.com/guide",
+          "concept": "documented_behavior",
+          "summary": "Two public sections described different behavior."
+        }
+      ],
+      "metrics": { "pages_visited": 2 },
+      "agent": { "runtime": "example-agent" },
+      "privacy": {
+        "user_prompt_included": false,
+        "file_contents_included": false,
+        "screenshots_included": false
+      },
+      "attribution": "external_interface_failure"
+    }
+  ],
+  "$defs": {
+    "count": { "type": "integer", "minimum": 0 },
+    "dimension": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status"],
+      "properties": {
+        "status": { "enum": ["good", "degraded", "blocked", "unknown"] },
+        "summary": { "type": "string", "maxLength": 500 }
+      }
+    },
+    "friction": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "summary"],
+      "properties": {
+        "type": {
+          "enum": [
+            "poor_discoverability",
+            "missing_information",
+            "ambiguous_instruction",
+            "conflicting_information",
+            "stale_documentation",
+            "version_mismatch",
+            "broken_example",
+            "undocumented_parameter",
+            "authentication_blocked",
+            "inaccessible_control",
+            "unexpected_state",
+            "navigation_loop",
+            "excessive_retries",
+            "verification_missing",
+            "human_intervention_required",
+            "unsupported_capability",
+            "other"
+          ]
+        },
+        "resource": { "type": "string", "format": "uri", "maxLength": 2048 },
+        "concept": { "type": "string", "pattern": "^[a-z0-9_:-]{1,100}$" },
+        "summary": { "type": "string", "minLength": 1, "maxLength": 1000 }
+      }
+    }
+  }
+}
