@@ -1,3 +1,4 @@
+export * from "./agent-feedback.js";
 export * from "./discovery.js";
 export * from "./deduplication.js";
 export * from "./privacy.js";

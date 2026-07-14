@@ -71,4 +71,91 @@ describe("Vercel gateway", () => {
       }),
     ).toThrow();
   });
+
+  it("leaves page responses unchanged unless Markdown embedding is enabled", async () => {
+    const gateway = createVercelGateway({
+      publicOrigin: "https://feedback.example.com",
+      targetOrigin: "https://docs.example.com",
+      storage: new MemoryStorage(),
+    });
+    const response = new Response("# Guide\n", {
+      headers: { "content-type": "text/markdown" },
+    });
+
+    expect(
+      await gateway.decoratePage(
+        new Request("https://docs.example.com/guide"),
+        response,
+      ),
+    ).toBe(response);
+  });
+
+  it("embeds feedback in Markdown pages without exposing request location data", async () => {
+    const gateway = createVercelGateway({
+      publicOrigin: "https://feedback.example.com",
+      targetOrigin: "https://docs.example.com",
+      storage: new MemoryStorage(),
+      agentFeedback: { embedInMarkdown: true },
+    });
+    const response = await gateway.decoratePage(
+      new Request(
+        "https://docs.example.com/guide?email=reader@example.com#private",
+        { headers: { accept: "text/markdown" } },
+      ),
+      new Response("# Guide\n", {
+        headers: {
+          "content-type": "text/markdown; charset=utf-8",
+          "content-length": "8",
+          vary: "Cookie",
+        },
+      }),
+    );
+    const body = await response.text();
+
+    expect(body).toContain(
+      'manifest="https://feedback.example.com/.well-known/breadcrumb"',
+    );
+    expect(body).toContain('resource="https://docs.example.com/guide"');
+    expect(body).not.toContain("reader@example.com");
+    expect(response.headers.get("content-length")).toBeNull();
+    expect(response.headers.get("vary")).toBe("Cookie, Accept");
+  });
+
+  it("never embeds feedback in human-facing HTML", async () => {
+    const gateway = createVercelGateway({
+      publicOrigin: "https://feedback.example.com",
+      targetOrigin: "https://docs.example.com",
+      storage: new MemoryStorage(),
+      agentFeedback: { embedInMarkdown: true },
+    });
+    const response = new Response("<h1>Guide</h1>", {
+      headers: { "content-type": "text/html" },
+    });
+
+    expect(
+      await gateway.decoratePage(
+        new Request("https://docs.example.com/guide"),
+        response,
+      ),
+    ).toBe(response);
+    expect(await response.text()).not.toContain("AgentFeedback");
+  });
+
+  it("rejects decoration outside the configured target origin", async () => {
+    const gateway = createVercelGateway({
+      publicOrigin: "https://feedback.example.com",
+      targetOrigin: "https://docs.example.com",
+      storage: new MemoryStorage(),
+      agentFeedback: { embedInMarkdown: true },
+    });
+
+    await expect(
+      gateway.decoratePage(
+        new Request("https://other.example.com/guide"),
+        new Response("# Guide\n", {
+          headers: { "content-type": "text/markdown" },
+        }),
+      ),
+    ).rejects.toThrow("configured target origin");
+  });
 });

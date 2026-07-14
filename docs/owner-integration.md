@@ -168,6 +168,34 @@ parser.
 <link rel="agent-feedback" href="/.well-known/breadcrumb" />
 ```
 
+### Opt-in agent-facing Markdown block
+
+Sites that already expose Markdown pages can append a concise `<AgentFeedback>` capability block
+to every agent-facing representation. For the Vercel gateway, enable the option and pass Markdown
+responses through the returned decorator:
+
+```ts
+const gateway = createVercelGateway({
+  publicOrigin: "https://example.com",
+  targetOrigin: "https://example.com",
+  storage,
+  agentFeedback: { embedInMarkdown: true },
+});
+
+const response = await renderMarkdownPage(request);
+return gateway.decoratePage(request, response);
+```
+
+The option is off by default. `decoratePage` modifies only `text/markdown` responses from the
+configured target origin, removes query strings and fragments from the advertised resource URL,
+and adds `Vary: Accept`. It returns HTML unchanged. Put the decorator in the central Markdown
+renderer or a framework adapter to cover every agent-facing page.
+
+The block is absent from normal HTML, not secret: a human who opens the raw Markdown can see it.
+Breadcrumb does not convert arbitrary HTML to Markdown, and the gateway cannot rewrite unrelated
+application routes unless they pass through `decoratePage`. The embedded text remains a non-binding
+capability notice; it does not override the agent runtime's network, privacy, or trust policy.
+
 ### Playwright and accessibility-tree discovery
 
 Playwright-driven agents commonly inspect the rendered accessibility tree. The discovery
