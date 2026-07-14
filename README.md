@@ -190,6 +190,11 @@ For a Vercel-hosted endpoint backed by a Marketplace PostgreSQL integration, see
 managed pool lifecycle, shared PostgreSQL rate limiting, release-step migrations, and no
 public report-reading route.
 
+Owners that already serve agent-facing Markdown can opt in to a managed `<AgentFeedback>` block
+while leaving normal HTML unchanged. See the
+[owner integration guide](docs/owner-integration.md#opt-in-agent-facing-markdown-block) for the
+Vercel configuration and page-decoration hook.
+
 Advertise the owner policy at `/.well-known/breadcrumb`, then add this file to a repository:
 
 ```json

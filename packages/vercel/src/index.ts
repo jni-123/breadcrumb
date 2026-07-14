@@ -1,4 +1,8 @@
 import {
+  appendAgentFeedback,
+  type AgentFeedbackEmbedOptions,
+} from "@breadcrumb/core";
+import {
   postgresAdapterFromPool,
   postgresRateLimiter,
   type PostgresAdapter,
@@ -101,12 +105,30 @@ export interface VercelGatewayOptions {
   protocolUrl?: string;
   reportSchemaUrl?: string;
   documentationUrl?: string;
+  agentFeedback?: {
+    /** Append a capability block only to decorated text/markdown responses. */
+    embedInMarkdown: boolean;
+  };
 }
 
 export interface VercelGateway {
   manifest(request: Request): Promise<Response>;
   ingest(request: Request): Promise<Response>;
+  /** Decorate a page response. HTML and default-off responses are returned unchanged. */
+  decoratePage(request: Request, response: Response): Promise<Response>;
 }
+
+const withVaryAccept = (headers: Headers): void => {
+  const existing = headers.get("vary");
+  if (existing === "*") return;
+  const values = (existing ?? "")
+    .split(",")
+    .map((value) => value.trim())
+    .filter((value) => value.length > 0);
+  if (!values.some((value) => value.toLowerCase() === "accept"))
+    values.push("Accept");
+  headers.set("vary", values.join(", "));
+};
 
 export const createVercelGateway = ({
   publicOrigin,
@@ -117,6 +139,7 @@ export const createVercelGateway = ({
   protocolUrl,
   reportSchemaUrl,
   documentationUrl,
+  agentFeedback,
 }: VercelGatewayOptions): VercelGateway => {
   const origin = normalizeOrigin(publicOrigin, "Breadcrumb public origin");
   const acceptedOrigin = normalizeOrigin(
@@ -127,6 +150,7 @@ export const createVercelGateway = ({
     ...policy,
     acceptedOrigins: [acceptedOrigin],
   };
+  const manifestUrl = `${origin}/.well-known/breadcrumb`;
   const ingest = createBreadcrumbHandler({
     storage,
     policy: effectivePolicy,
@@ -155,6 +179,37 @@ export const createVercelGateway = ({
       );
     },
     ingest,
+    async decoratePage(
+      request: Request,
+      response: Response,
+    ): Promise<Response> {
+      if (agentFeedback?.embedInMarkdown !== true) return response;
+      if (request.method === "HEAD" || response.body === null) return response;
+      const contentType =
+        response.headers.get("content-type")?.split(";", 1)[0]?.trim() ?? "";
+      if (contentType.toLowerCase() !== "text/markdown") return response;
+
+      const resource = new URL(request.url);
+      if (resource.origin !== acceptedOrigin)
+        throw new Error(
+          "Agent feedback page origin must match the configured target origin",
+        );
+      resource.search = "";
+      resource.hash = "";
+      const embedOptions: AgentFeedbackEmbedOptions = {
+        manifestUrl,
+        resourceUrl: resource.href,
+      };
+      const body = appendAgentFeedback(await response.text(), embedOptions);
+      const headers = new Headers(response.headers);
+      headers.delete("content-length");
+      withVaryAccept(headers);
+      return new Response(body, {
+        status: response.status,
+        statusText: response.statusText,
+        headers,
+      });
+    },
   };
 };
 
