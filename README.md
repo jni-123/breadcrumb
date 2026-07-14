@@ -33,6 +33,83 @@ not override the runtime's existing network or trust policy. Reports must not co
 assistant messages, tool arguments or output, command text, file contents, environment
 variables, credentials, transcripts, or raw session identifiers.
 
+### Example report
+
+An accepted report is stored as structured JSON like the sanitized example below. It contains
+only public resource URLs, aggregate metrics, typed friction, and explicit privacy declarations;
+the names, domain, and scenario are illustrative.
+
+```json
+{
+  "schema_version": "0.1",
+  "event_type": "task_succeeded_with_friction",
+  "target": {
+    "type": "documentation",
+    "origin": "https://docs.example.com",
+    "uri": "https://docs.example.com/typing-metrics.html"
+  },
+  "task": {
+    "category": "documentation_verification",
+    "description": "Determine the documented WPM and accuracy formulas for a typing tool."
+  },
+  "outcome": {
+    "status": "success_with_friction",
+    "confidence": 0.98,
+    "summary": "The formulas were determined after reconciling two conflicting public documentation pages and verifying the current application behavior."
+  },
+  "dimensions": {
+    "discoverability": {
+      "status": "good"
+    },
+    "comprehensibility": {
+      "status": "degraded",
+      "summary": "Two public documentation pages provide incompatible formulas, and the older page is labeled as recommended."
+    },
+    "executability": {
+      "status": "good"
+    },
+    "verifiability": {
+      "status": "degraded",
+      "summary": "Manual verification was required to resolve the documentation conflict."
+    }
+  },
+  "friction": [
+    {
+      "type": "conflicting_information",
+      "concept": "wpm_and_accuracy_formulas",
+      "summary": "One guide specifies a six-character word and prompt-length accuracy, while another specifies a five-character word, an error-adjusted WPM formula, and typed-character accuracy.",
+      "resource": "https://docs.example.com/typing-metrics.html"
+    },
+    {
+      "type": "stale_documentation",
+      "concept": "typing_metrics_guide",
+      "summary": "The older guide no longer matches application behavior and should be updated or removed.",
+      "resource": "https://docs.example.com/typing-metrics.html"
+    }
+  ],
+  "metrics": {
+    "pages_visited": 7,
+    "tool_calls": 20,
+    "retries": 1
+  },
+  "agent": {
+    "runtime": "example-agent"
+  },
+  "privacy": {
+    "user_prompt_included": false,
+    "file_contents_included": false,
+    "screenshots_included": false
+  },
+  "attribution": "external_interface_failure",
+  "deduplication": {
+    "dedupe_hash": "sha256:c404f61d4d790ba6926a86dd6da0720cc737a62d80d94e4ef06f4fa9744059a8",
+    "issue_key": "docs.example.com:documentation_verification:conflicting_information:wpm_and_accuracy_formulas"
+  }
+}
+```
+
+Agents may omit `deduplication`; the owner endpoint computes and verifies it before storage.
+
 ## Documentation
 
 - [Documentation index](docs/README.md)
